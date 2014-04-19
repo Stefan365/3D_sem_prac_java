@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+    <display-name>
+        SEM_PRACE
+    </display-name>
+
+    <servlet>
+        <servlet-name>first</servlet-name>
+        <servlet-class>P1</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>first_1</servlet-name>
+        <servlet-class>P1_1</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>second</servlet-name>
+        <servlet-class>P2</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>second_1</servlet-name>
+        <servlet-class>P2_1</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>third</servlet-name>
+        <servlet-class>P3</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>third_1</servlet-name>
+        <servlet-class>P3_1</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>fourth</servlet-name>
+        <servlet-class>P4</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>fourth_1</servlet-name>
+        <servlet-class>P4_1</servlet-class>
+    </servlet>    
+
+    <servlet>
+        <servlet-name>fourth_2</servlet-name>
+        <servlet-class>P4_2</servlet-class>
+    </servlet> 
+
+    <servlet>
+        <servlet-name>fifth</servlet-name>
+        <servlet-class>P5</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>fifth_1</servlet-name>
+        <servlet-class>P5_1</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>sixth</servlet-name>
+        <servlet-class>P6</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>sixth_1</servlet-name>
+        <servlet-class>P6_1</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>seventh</servlet-name>
+        <servlet-class>P7</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>seventh_1</servlet-name>
+        <servlet-class>P7_1</servlet-class>
+    </servlet>
+    
+        
+            
+                
+                    
+                        
+                            
+                                
+                                    
+                                        
+                                                
+    <servlet-mapping>
+        <servlet-name>first</servlet-name>
+        <url-pattern>/first</url-pattern>
+    </servlet-mapping>
+	
+    <servlet-mapping>
+        <servlet-name>first_1</servlet-name>
+        <url-pattern>/first_1</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>second</servlet-name>
+        <url-pattern>/second</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>second_1</servlet-name>
+        <url-pattern>/second_1</url-pattern>
+    </servlet-mapping>    
+    
+    <servlet-mapping>
+        <servlet-name>third</servlet-name>
+        <url-pattern>/third</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>third_1</servlet-name>
+        <url-pattern>/third_1</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>fourth</servlet-name>
+        <url-pattern>/fourth</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>fourth_1</servlet-name>
+        <url-pattern>/fourth_1</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>fourth_2</servlet-name>
+        <url-pattern>/fourth_2</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>fifth</servlet-name>
+        <url-pattern>/fifth</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>fifth_1</servlet-name>
+        <url-pattern>/fifth_1</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>sixth</servlet-name>
+        <url-pattern>/sixth</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>sixth_1</servlet-name>
+        <url-pattern>/sixth_1</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>seventh</servlet-name>
+        <url-pattern>/seventh</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>seventh_1</servlet-name>
+        <url-pattern>/seventh_1</url-pattern>
+    </servlet-mapping>
+
+
+</web-app>
