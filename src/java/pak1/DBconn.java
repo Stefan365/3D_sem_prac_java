@@ -18,12 +18,12 @@ import java.util.logging.Logger;
 public class DBconn {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DATABASE_URL = "jdbc:mysql://localhost/IIVOS_java2";
-    static final String USER = "root";
-    static final String PASSWORD = "";
-    //static final String DATABASE_URL = "jdbc:mysql://project.iivos.cz:9906/iivos3Dalfa?characterEncoding=utf8";
-    //static final String USER = "veres";
-    //static final String PASSWORD = "Stefan.Veres";
+    //static final String DATABASE_URL = "jdbc:mysql://localhost/IIVOS_java2";
+    //static final String USER = "root";
+    //static final String PASSWORD = "";
+    static final String DATABASE_URL = "jdbc:mysql://project.iivos.cz:9906/iivos3Dalfa?characterEncoding=utf8";
+    static final String USER = "veres";
+    static final String PASSWORD = "Stefan.Veres";
 
     public static Connection connection;
 
@@ -41,6 +41,11 @@ public class DBconn {
 
 
     //1.0
+    /**
+     * Vytvori tabulku T_USER. Sluzi na ukladanie udajov o zaregistrocanych uzivateloch
+     * 
+     * @throws java.sql.SQLException
+     */
     private static void createTableUser() throws SQLException {
         Statement stmt = (Statement) connection.createStatement();
         String sql = "CREATE TABLE T_USER"
@@ -57,6 +62,11 @@ public class DBconn {
     }
 
     //1.1
+     /**
+     * Vytvori tabulku T_Q1. Dotaznikova tabulka 1.
+     * 
+     * @throws java.sql.SQLException
+     */
     private static void createTableQ1() throws SQLException {
         Statement stmt = (Statement) connection.createStatement();
 
@@ -77,6 +87,11 @@ public class DBconn {
     }
     
     //1.2
+    /**
+     * Vytvori tabulku T_Q2. Dotaznikova tabulka 2.
+     * 
+     * @throws java.sql.SQLException
+     */
     private static void createTableQ2() throws SQLException {
         Statement stmt = (Statement) connection.createStatement();
 
@@ -99,6 +114,12 @@ public class DBconn {
     }
     
     //1.3
+     /**
+     * Vytvori tabulku T_QUERY. Tato tabulka predstavuje zoznam 
+     * vs. dotaznikovych tabuliek v systeme.
+     * 
+     * @throws java.sql.SQLException
+     */
     private static void createTableQueries() throws SQLException {
         Statement stmt = (Statement) connection.createStatement();
 
@@ -114,14 +135,22 @@ public class DBconn {
     }
     
     
-    
-    
     //2.0 Inserting new values:
+    /**
+     * Vlozi do tab. T_USER novy riadok.
+     * 
+     * @param fn first name
+     * @param ln last name
+     * @param lg login
+     * @param pw password
+     * @param rol user role
+     * @throws java.sql.SQLException
+     */
     public static void insertValuesUser(String fn, String ln, String lg, String pw, String rol) throws SQLException {
 
-        PreparedStatement st = null;
         String sql = "INSERT INTO T_USER (first_name, last_name, login, password, role) "
             + " VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement st;
         st = connection.prepareStatement(sql);
         st.setString(1, fn);
         st.setString(2, ln);
@@ -135,6 +164,15 @@ public class DBconn {
     }
 
     //2.1
+    /**
+     * Upravi existujuce hodnoty v tab. T_USER.
+     * 
+     * @param uid user id
+     * @param fn first name
+     * @param ln last name
+     * @param pw password
+     * @throws java.sql.SQLException
+     */
     public static void updateValuesUser(String uid, String fn, String ln, String pw) 
         throws SQLException {
 
@@ -151,6 +189,16 @@ public class DBconn {
     }
 
     //2.2
+    /**
+     * Upravi existujuce hodnoty v tab. T_USER.
+     * 
+     * @param uid
+     * @param fn first name
+     * @param ln last name
+     * @param role
+     * @param pw password
+     * @throws java.sql.SQLException
+     */
     public static void updateValuesUser(String uid, String fn, String ln, String pw, String role) 
         throws SQLException {
 
@@ -168,6 +216,25 @@ public class DBconn {
     }
 
     //2.3
+    /**
+     * Vlozi do tab. T_Q1 alebo T_Q2 novy riadok.
+     * 
+     * @param qTable nazov DB tabulky, (tj. T_Q1 alebo TQ_2)
+     * @param gen gender
+     * @param ag age group
+     * @param ed education
+     * @param ig income group
+     * @param q1 question 1
+     * @param q2 question 2
+     * @param q3 question 3
+     * @param q4 question 4
+     * @param q5 question 5
+     * @param q6 question 6
+     * @param q7 question 7
+     * @param uid user id
+     * 
+     * @throws java.sql.SQLException
+     */
     public static void insertValuesQ(String qTable, String gen, String ag,
         String ed, String ig, String q1, String q2, String q3, String q4, String q5,
         String q6, String q7, int uid) throws SQLException {
@@ -183,7 +250,6 @@ public class DBconn {
                 part2 = " (gender, age_group, education, income, q1, q2, q3, user_id)";
                 part3 = String.format(" VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %d)",
                     gen, ag, ed, ig, q1, q2, q3, uid);
-                //" VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 break;
             case "T_Q2":
                 part2 = " (gender, age_group, education, income, q1, q2, q3, q4, q5, q6, q7, user_id)";
@@ -205,8 +271,14 @@ public class DBconn {
 
     
     //2.4
+    /**
+     * Vlozi novy riadok do tabulky T_QUERY
+     * 
+     * @param tn DB table name
+     * @throws java.sql.SQLException
+     */
     public static void insertValuesT_QUERY(String tn) throws SQLException{
-        PreparedStatement st = null;
+        PreparedStatement st;
         String sql = "INSERT INTO T_QUERY (q_tableName) "
             + " VALUES (?)";
         st = connection.prepareStatement(sql);
@@ -218,22 +290,35 @@ public class DBconn {
     
     
     
-    //3. Drop any table
-    private static void dropTable(String tableName) throws SQLException {
-        Statement stmt = null;
+    //3.
+    /**
+     * Drop any table in DB
+     * 
+     * @param tn DB table name
+     * @throws java.sql.SQLException
+     */
+    private static void dropTable(String tn) throws SQLException {
+        Statement stmt;
         stmt = (Statement) connection.createStatement();
-        String sql = "DROP TABLE " + tableName;
+        String sql = "DROP TABLE " + tn;
 
         if (!(stmt.executeUpdate(sql) == 1)) {
             throw new SQLException();
         }
-        System.out.println("Droped table: " + tableName + " in given database...");
+        System.out.println("Droped table: " + tn + " in given database...");
     }
     
     
     
     
     //4.0 gets user id
+    /**
+     * Ziska id daneho uzivatela na zaklade znameho login-u
+     * 
+     * @param login login uzivatela
+     * @return 
+     * @throws java.sql.SQLException
+     */
     public static String getUserId(String login) throws SQLException {
         
         Statement stmt = (Statement) connection.createStatement();
@@ -249,7 +334,14 @@ public class DBconn {
         return "" + id;
     }
 
-    //4.1 gets users first name 
+    //4.1  
+    /**
+     * gets users first name
+     * 
+     * @param uid id uzivatela
+     * @return 
+     * @throws java.sql.SQLException
+     */
     public static String getUserFn(String uid) throws SQLException {
         
         Statement stmt = (Statement) connection.createStatement();
@@ -264,7 +356,14 @@ public class DBconn {
         return fn;
     }
     
-    //4.2 gets users last name 
+    //4.2
+    /**
+     * gets users last name
+     * 
+     * @param uid id uzivatela
+     * @return 
+     * @throws java.sql.SQLException
+     */
     public static String getUserLn(String uid) throws SQLException {
         
         Statement stmt = (Statement) connection.createStatement();
@@ -278,7 +377,14 @@ public class DBconn {
         return ln;
     }
 
-    //4.3 gets users login 
+    //4.3
+    /**
+     * gets users login
+     * 
+     * @param uid id uzivatela
+     * @return 
+     * @throws java.sql.SQLException
+     */
     public static String getUserLg(String uid) throws SQLException {
         
         Statement stmt = (Statement) connection.createStatement();
@@ -293,6 +399,13 @@ public class DBconn {
     }
 
     //4.4 gets users password 
+    /**
+     * gets users password
+     * 
+     * @param uid id uzivatela
+     * @return 
+     * @throws java.sql.SQLException
+     */
     public static String getUserPw(String uid) throws SQLException {
         
         Statement stmt = (Statement) connection.createStatement();
@@ -307,6 +420,13 @@ public class DBconn {
     }
 
     //4.5 gets user role 
+    /**
+     * gets users role
+     * 
+     * @param uid id uzivatela
+     * @return 
+     * @throws java.sql.SQLException
+     */
     public static String getUserRole(String uid) throws SQLException {
         
         Statement stmt = (Statement) connection.createStatement();
@@ -320,7 +440,13 @@ public class DBconn {
         return role;
     }
 
-    //5.5 initialize Database 
+    //5.5 
+    /**
+     * initialize Database. tj. vytvori prislusne DB tabulky.
+     * a naplni je nevyhnutnymi udaji.
+     * 
+     * @throws java.sql.SQLException
+     */
     public static synchronized void initDB() throws SQLException {
         DBconn.createTableUser();
         DBconn.createTableQ1();
@@ -330,5 +456,4 @@ public class DBconn {
         DBconn.insertValuesT_QUERY("T_Q2");
         insertValuesUser("Stefan", "Veres", "admin", "admin", "A");
     }
-
 }

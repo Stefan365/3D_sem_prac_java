@@ -131,8 +131,8 @@ public class Pom {
     /**
      * Zapise atributy do DB.
      *
-     * @param sessionB klientuv session.
      * @param request pozadavek od klienta.
+     * @throws java.sql.SQLException
      *
      */
     public static void zapisDbUser(HttpServletRequest request) throws SQLException {
@@ -172,10 +172,9 @@ public class Pom {
         } else {
             DBconn.updateValuesUser(uid, fn, ln, pw, role);
         }
-        
     }
-
-    //2. FUNGUJE!
+    
+    //2.0
     /**
      * Zapise atributy do Session (po kontrole hesla).
      *
@@ -201,10 +200,6 @@ public class Pom {
         session.setAttribute("lastname", ln);
         session.setAttribute("password", pw);
 
-        //dat to do inej metody, tu potom zavolat aj pri zmene udajov!!!!
-        //System.out.println("H ZAPISUJEM ID: *" + id + "* : *" + session.getAttribute("uid") + "*");
-        //System.out.println("H ZAPISUJEM LOGIN : *" + lg + "* : *" + session.getAttribute("login") + "*");
-        // System.out.println("H ZAPISUJEM PASSWORD : *" + pw + "* : *" + session.getAttribute("password") + "*");        
     }
 
     //2.1
@@ -217,7 +212,7 @@ public class Pom {
      *
      */
     public static void zapisSesFnLnPw(HttpSession session, HttpServletRequest request) throws SQLException {
-        String fn, ln, pw, uid;
+        String fn, ln, pw;
 
         fn = request.getParameter("firstname");
         ln = request.getParameter("lastname");
@@ -232,16 +227,10 @@ public class Pom {
          */
         //Zapis do session, aby to bolo stale poruke:
         session.setAttribute("firstname", fn);
-        //System.out.println("D, ZAPISUJEM firstname : *" + fn + "* : *" + session.getAttribute("firstname") + "*");
-
         session.setAttribute("lastname", ln);
-        //System.out.println("D, ZAPISUJEM lastname : *" + ln + "* : *" + session.getAttribute("lastname") + "*");
-
         // zapis pw sa len zdanlivo bije vid metoda vyssie, tato metoda ma sirsie 
-        // pouzite, preto sa tieto 
-        // 2 zapisy nebiju.
+        // pouzite, preto sa tieto 2 zapisy nebiju.
         session.setAttribute("password", pw);
-        //System.out.println("D ZAPISUJEM PASSWORD : *" + pw + "* : *" + session.getAttribute("password") + "*");
 
     }
 
@@ -262,7 +251,6 @@ public class Pom {
         session.setAttribute("questionaire", "");
         session.setAttribute("q_table", "");
         session.setAttribute("sel_user", "");
-
     }
 
     //3.
@@ -270,6 +258,7 @@ public class Pom {
      * inicializuje messsage.
      *
      * @param mySession klientuv session.
+     * @param attr atribut session
      *
      */
     public static void nastavMessage(HttpSession mySession, String attr) {
@@ -287,6 +276,7 @@ public class Pom {
      *
      * @param session klientuv session.
      * @param request pozadavek od klienta.
+     * @throws java.sql.SQLException
      *
      */
     public static void zapisDbQuest(HttpSession session, HttpServletRequest request) throws SQLException {
@@ -309,10 +299,9 @@ public class Pom {
         q_tab = request.getParameter("q_table");
 
         //zapis hodnoty do DB:
-        if (q_tab != "") {
+        if (!q_tab.equals("")) {
             DBconn.insertValuesQ(q_tab, gen, ag, ed, ig, q1, q2, q3, q4, q5, q6, q7, uid);
         }
-
     }
 
     //5.
@@ -327,7 +316,6 @@ public class Pom {
 
         Statement stmt1 = null;
 
-        //Vector<Vector<String>> data1 = new Vector<>();
         Vector<String> col1 = new Vector<>();
         Vector<String> col2 = new Vector<>();
 
@@ -343,8 +331,7 @@ public class Pom {
         col1.add("where did you buy your last piece of furniture?");
         col1.add("Are you satisfied with it? (1 = not at all, 5 = very)");
         col1.add("Are you going to choose the same seller again?");
-        //data1.add(col1);
-
+        
         String query1 = "select gender, age_group, education, income, q1, q2, q3, user_id from T_Q1"
             + " WHERE user_id = " + uid;
 
@@ -360,10 +347,8 @@ public class Pom {
                 col2.add(rs1.getString("q1"));
                 col2.add(rs1.getString("q2"));
                 col2.add(rs1.getString("q3"));
-                //data1.add(col2);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         } finally {
             if (stmt1 != null) {
                 try {
@@ -400,7 +385,6 @@ public class Pom {
 
         Statement stmt1 = null;
 
-        //Vector<Vector<String>> data1 = new Vector<>();
         Vector<String> col1 = new Vector<>();
         Vector<String> col2 = new Vector<>();
 
@@ -417,7 +401,6 @@ public class Pom {
         col1.add("Do you have PC with internet?");
         col1.add("Are you happy with your living standard? \n\n( 1 = not at all, 5 = very)");
 
-        //data1.add(col1);
         String query1 = "select gender, age_group, education, income, q1, q2, "
             + "q3, q4, q5, q6, q7, user_id from T_Q2"
             + " WHERE user_id = " + uid;
@@ -438,10 +421,8 @@ public class Pom {
                 col2.add(rs1.getString("q5"));
                 col2.add(rs1.getString("q6"));
                 col2.add(rs1.getString("q7"));
-                //data1.add(col2);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         } finally {
             if (stmt1 != null) {
                 try {
@@ -486,7 +467,6 @@ public class Pom {
                 header = rs2.getString("login") + " : " + tn.substring(tn.length() - 2);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         } finally {
             if (stmt2 != null) {
                 try {
@@ -498,8 +478,8 @@ public class Pom {
 
         JFrame frame = new JFrame(header);
         JPanel panel = new JPanel();
-        JTable table = null;
-
+        JTable table;
+        
         switch (tn) {
             case "T_Q1":
                 table = createTableQ1(uid);
@@ -517,7 +497,7 @@ public class Pom {
         panel.setName(header);
         panel.setOpaque(true); //content panes must be opaque
 
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//.DO_NOTHING_ON_CLOSE);//.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setContentPane(panel);
         frame.pack();
         frame.setVisible(true);
@@ -533,13 +513,14 @@ public class Pom {
      */
     public static void spustiGUI(final String tn, final String uid) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 createGUI(tn, uid);
             }
         });
     }
 
-    //9.
+    //8.
     /**
      * Zkontroluje kolko a ktore z dotaznikov dany uzivatel uz vyplnil.
      *
@@ -559,21 +540,18 @@ public class Pom {
         String query2;
         Statement stmt1, stmt2 = null;
 
-        String tn = "";
-        String userId = "";
+        String tn, userId = "";
 
         try {
             stmt1 = (DBconn.connection).createStatement();
             stmt2 = (DBconn.connection).createStatement();
 
             ResultSet rs1 = stmt1.executeQuery(query1);
-            //System.out.println("RS LENGTH: ");
-
+            
             ResultSet rs2;
             while (rs1.next()) {
                 tn = rs1.getString("q_tableName");
-                //System.out.println("PRE: " + tn);
-
+            
                 //prohledavani dotaznikovych tabulek: 
                 query2 = preQuery + tn + postQuery;
 
@@ -590,13 +568,10 @@ public class Pom {
             }
             listAll.add(listYes);
             listAll.add(listNo);
-            //System.out.println("LISTALL 0 SIZE: " + listAll.get(0).size());
-            //System.out.println("LISTALL 1 SIZE: " + listAll.get(1).size());
-
+            
             return listAll;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         } finally {
             if (stmt2 != null) {
@@ -610,7 +585,7 @@ public class Pom {
         }
     }
 
-    //10.
+    //9.
     /**
      * Zkontroluje kolko a ktore z dotaznikov dany uzivatel uz vyplnil a vytvori
      * prislusny xhtml text.
@@ -628,8 +603,7 @@ public class Pom {
         while (itr.hasNext()) {
             tn = (String) itr.next();
             page = tn.substring(tn.length() - 2);
-            //System.out.println("SOM V CREATE YES BUTTONS, V CASTI PRE TVORBOU TLACITKA");
-            //TVORBA ODOSIELACIEHO TLACITKA:
+       
             strBut = "";
             strBut = strBut + "<div>\n";
             strBut = strBut + "<form action=\"fourth\" method=\"post\">\n";
@@ -639,15 +613,13 @@ public class Pom {
             strBut = strBut + "</div>\n";
             strBut = strBut + "\n";
 
-            //System.out.println(strBut);
-            //System.out.println("SOM V CREATE YES BUTTONS, V CASTI ZA TVORBOU TLACITKA");
             listYes.add(strBut);
         }
 
         return listYes;
     }
 
-    //11.
+    //10.
     /**
      * Zkontroluje kolko a ktore z dotaznikov dany uzivatel este nevyplnil a
      * vytvori prislusny xhtml text.
@@ -681,16 +653,15 @@ public class Pom {
         return listNo;
     }
 
-    //12.
+    //11.
     /**
      * Vytvori vsetky potrebne tlacitka, tj. vytvori prislusny xhtml text.
      *
-     * @param li login.
+     * @param lia
      * @return list of xhtml texts of buttons.
      *
      */
-    //public static List<List<String>> createAllButtons(List<List<String>> lia){
-    public static String createAllButtons(List<List<String>> lia) {
+     public static String createAllButtons(List<List<String>> lia) {
 
         List<List<String>> listAllButt = new ArrayList<>();
 
@@ -709,14 +680,11 @@ public class Pom {
             str = str + "\n";
             str = str + "\n";
             str = str + "\n";
-            str = str + "\n";
-            str = str + "\n";
         }
-
-        return str;
+       return str;
     }
 
-    //13.
+    //12.
     /**
      * Zkontroluje jestli je user admin.
      *
@@ -737,14 +705,9 @@ public class Pom {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 role = rs.getString("role");
-                if (role.equals("A")) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return role.equals("A");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         } finally {
             if (stmt != null) {
@@ -754,21 +717,21 @@ public class Pom {
 
                 }
             }
-
         }
         return false;
     }
-    //8.
+    
+    //13.
     /**
      * Zkontroluje spravnost hesla pri prihlasovani.
      *
      * @param lg login.
      * @param pw password.
+     * @return 
      *
      */
     public static boolean checkPassword(String lg, String pw) {
 
-        //System.out.println("som tu 4");
         String query1 = "SELECT password from T_USER WHERE login LIKE '" + lg + "'";
         String realPw = "";
         Statement stmt = null;
@@ -784,8 +747,6 @@ public class Pom {
             return (realPw == null ? false : realPw.equals(pw));
 
         } catch (SQLException e) {
-
-            e.printStackTrace();
             return false;
         } finally {
             if (stmt != null) {
@@ -797,9 +758,15 @@ public class Pom {
         }
     }
 
-    //Vrati zoznam mien + id vsetkych zaregistrovanych userov v systeme,
-    //tj. len tych ktori niesu Admini.(aby sa nemohli navzajom vymazat, resp.
-    //upravovat si udaje)
+    //14.
+    /**
+     * Vrati zoznam mien + id vsetkych zaregistrovanych userov v systeme,
+     * tj. len tych ktori niesu Admini.(aby sa nemohli navzajom vymazat, resp.
+     * upravovat si udaje)
+     *
+     * @return zoznam mien + id na tvorbu combo boxu.
+     *
+     */
     private static List<String> getComboNames() throws SQLException {
 
         List<String> comboNames = new ArrayList();
@@ -811,7 +778,6 @@ public class Pom {
             stmt = (DBconn.connection).createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                cn = "";
                 uid = "" + rs.getInt("id");
                 fn = rs.getString("first_name");
                 ln = rs.getString("last_name");
@@ -821,7 +787,6 @@ public class Pom {
             return comboNames;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         } finally {
             if (stmt != null) {
@@ -833,7 +798,12 @@ public class Pom {
         }
     }
 
-    //1.
+    //15.
+    /**
+     * Vrati zoznam html kodov pre tvorbu comboboxu.
+     *
+     * @return zoznam html kodu na tvorbu combo boxu.
+     */
     private static List<String> createComboList(List<String> cns) {
 
         List<String> comboItems = new ArrayList<>();
@@ -858,12 +828,12 @@ public class Pom {
         return comboItems;
     }
 
-    //12.
+    //16.
     /**
      * Vytvori vsetky potrebne tlacitka, tj. vytvori prislusny xhtml text.
      *
-     * @param li login.
-     * @return list of xhtml texts of buttons.
+     * @return string of xhtml texts of for creating combobox.
+     * @throws java.sql.SQLException
      *
      */
     public static String createComboFinal() throws SQLException {
@@ -884,8 +854,15 @@ public class Pom {
         return str;
     }
 
+    //17.
+    /**
+     * Ziska user id z nazvu combo polozky.
+     * 
+     * @param cn combo item name
+     * @return string of user id.
+     */
     public static String getIdFromComboName(String cn) {
-        //JOptionPane.showMessageDialog(null, "*" + cn + "*", "infoMessage", JOptionPane.INFORMATION_MESSAGE);
+
         String[] zoz = cn.split(",");
         int uid = 0;
         
@@ -897,9 +874,13 @@ public class Pom {
         return "" + uid;
     }
 
-    //Vrati zoznam mien + id vsetkych zaregistrovanych userov v systeme,
-    //tj. len tych ktori niesu Admini.(aby sa nemohli navzajom vymazat, resp.
-    //upravovat si udaje)
+    //18.
+    /**
+     * Vymaze z Databazy vsetky zaznamy usera s dany id.
+     * 
+     * @param uid user id
+     * @throws java.sql.SQLException
+     */
     public static void deleteDbId(String uid) throws SQLException {
         
         List<String> queryTables = Pom.getQueryTableNames();
@@ -919,7 +900,6 @@ public class Pom {
                 stmt = (DBconn.connection).createStatement();
                 stmt.executeUpdate(sql);
             } catch (SQLException e) {
-                e.printStackTrace();
             } finally {
                 if (stmt != null) {
                     try {
@@ -935,7 +915,6 @@ public class Pom {
              stmt = (DBconn.connection).createStatement();
              stmt.executeUpdate(sqlu);
             } catch (SQLException e) {
-                e.printStackTrace();
             } finally {
                 if (stmt != null) {
                     try {
@@ -944,11 +923,15 @@ public class Pom {
                     }
                 }
             }
-        
-
     }
 
-    //Vrati zoznam mien DB tabuliek dotaznikov
+    //19.
+    /**
+     * Vrati zoznam mien DB tabuliek dotaznikov
+     *
+     * @return zoznam databazovych tabuliek, ktore zodpovedaju dotaznikom.
+     * @throws java.sql.SQLException
+     */
     private static List<String> getQueryTableNames() throws SQLException {
 
         List<String> queryTables = new ArrayList();
@@ -966,7 +949,6 @@ public class Pom {
             return queryTables;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         } finally {
             if (stmt != null) {
@@ -978,6 +960,12 @@ public class Pom {
         }
     }
     
+    //20.
+    /**
+     * Vrati html text pre tvorbu tlacitka pre prepnutie sa fo admin rezimu.
+     *
+     * @return html string pre tvorbu tlacitka GO ADMIN.
+     */
     public static String goAdminText() {
     
         String str;    //change usder data button:
@@ -990,7 +978,13 @@ public class Pom {
         
         return str;
     }
-
+    
+    //21.
+    /**
+     * Vrati html text pre tvorbu tlacitka pre inicializaciu databazy.
+     *
+     * @return html string pre tvorbu tlacitka na inicializaci DB.
+     */
     public static String initDbText() {
     
         String str;    
@@ -1004,6 +998,13 @@ public class Pom {
         return str;
     }
 
+    //22.
+    /**
+     * Vrati html text pre tvorbu tlacitka pre prepnutie sa admina spat do rezimu 
+     * bezneho usera.
+     *
+     * @return html string pre tvorbu tlacitka na prepnutie do user modu.
+     */
     public static String goUserText() {
     
         String str;    //change usder data button:
@@ -1017,6 +1018,13 @@ public class Pom {
         return str;
     }
 
+    //23.
+    /**
+     * Zjistuje jestli existuje DB tabulka T_USER, 
+     * na zaklade ceho usoudi, jestli ma spustit inicializaci DB.
+     *
+     * @return ano/ne pro existenci T_USER v databazi.
+     */
     public static boolean existsT_USER() {
         com.mysql.jdbc.Statement stmt = null;
         try {
@@ -1035,23 +1043,4 @@ public class Pom {
             }
         }
     }
-
-    /*
-    public static void skusRequest1(HttpServletRequest request) throws SQLException {
-        String lg;
-
-        lg = (String) request.getParameter("login");
-        System.out.println("request 1: " + lg);
-        skusRequest2(request);
-
-    }
-
-    public static void skusRequest2(HttpServletRequest request) throws SQLException {
-        String lg;
-
-        lg = (String) request.getParameter("login");
-        System.out.println("request 2: " + lg);
-
-    }*/
-
 }
