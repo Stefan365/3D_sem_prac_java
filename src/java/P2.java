@@ -58,11 +58,11 @@ public class P2 extends HttpServlet {
         out.println("<label>");
         out.println("FIRST NAME : ");
         out.println("<input type=\"text\" value=\"default\" name=\"firstname\"/><br/>");
-        out.println("LAST NAME : ");
+        out.println(" LAST NAME : ");
         out.println("<input type=\"text\" name=\"lastname\"/><br/>");
-        out.println("LOGIN : ");
+        out.println("     LOGIN : ");
         out.println("<input type=\"text\" name=\"login\"/><br/>");
-        out.println("PASSWORD : ");
+        out.println("  PASSWORD : ");
         out.println("<input type=\"password\" name=\"password\"/><br/>");
         //ODOSIELACIE TLACITKO:
         out.println("<input type=\"submit\" value=\"SEND\">");

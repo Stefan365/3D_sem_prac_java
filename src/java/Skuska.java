@@ -1,9 +1,12 @@
 
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import pak1.CryptMD5;
+import pak1.DBconn;
+import static pak1.DBconn.insertValuesUser;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,7 +19,7 @@ import pak1.CryptMD5;
  */
 public class Skuska {
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) throws UnsupportedEncodingException, SQLException {
         //try {
             /*
             try {
@@ -96,7 +99,7 @@ public class Skuska {
             //Pom.zapisDbUserApp(null, null);
             
             System.out.println(CryptMD5.crypt("ahoj"));
-
+            DBconn.insertValuesUser("Stefan", "Veres", "admin", CryptMD5.crypt("admin"), "A");
             
             //} catch (SQLException ex) {
             //    Logger.getLogger(Skuska.class.getName()).log(Level.SEVERE, null, ex);

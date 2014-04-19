@@ -18,12 +18,12 @@ import java.util.logging.Logger;
 public class DBconn {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    //static final String DATABASE_URL = "jdbc:mysql://localhost/IIVOS_java2";
-    //static final String USER = "root";
-    //static final String PASSWORD = "";
-    static final String DATABASE_URL = "jdbc:mysql://project.iivos.cz:9906/iivos3Dalfa?characterEncoding=utf8";
-    static final String USER = "veres";
-    static final String PASSWORD = "Stefan.Veres";
+    static final String DATABASE_URL = "jdbc:mysql://localhost/IIVOS_java2";
+    static final String USER = "root";
+    static final String PASSWORD = "";
+    //static final String DATABASE_URL = "jdbc:mysql://project.iivos.cz:9906/iivos3Dalfa?characterEncoding=utf8";
+    //static final String USER = "veres";
+    //static final String PASSWORD = "Stefan.Veres";
 
     public static Connection connection;
 
@@ -50,7 +50,7 @@ public class DBconn {
         Statement stmt = (Statement) connection.createStatement();
         String sql = "CREATE TABLE T_USER"
             + " (id INTEGER not NULL AUTO_INCREMENT, " + " first_name VARCHAR(30),"
-            + " last_name VARCHAR(30),  login VARCHAR(30) NOT NULL, password VARCHAR(30) NOT NULL,"
+            + " last_name VARCHAR(30),  login VARCHAR(30) NOT NULL, password VARCHAR(50) NOT NULL,"
             + " role VARCHAR(1),"
             
             + " PRIMARY KEY(id),"
@@ -454,6 +454,6 @@ public class DBconn {
         DBconn.createTableQueries();
         DBconn.insertValuesT_QUERY("T_Q1");
         DBconn.insertValuesT_QUERY("T_Q2");
-        insertValuesUser("Stefan", "Veres", "admin", "admin", "A");
+        insertValuesUser("Stefan", "Veres", "admin", CryptMD5.crypt("admin"), "A");
     }
 }

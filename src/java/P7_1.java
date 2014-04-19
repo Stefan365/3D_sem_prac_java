@@ -53,7 +53,7 @@ public class P7_1 extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h3 id=\"podmenu\">");
-            out.println("ADMIN DATA UPDATE OF USER " + lg + " WAS SUCCESSFUL!");
+            out.println("ADMIN DATA UPDATE OF USER " + comboName + " WAS SUCCESSFUL!");
             out.println("</h3>"
                 + "<div id=\"paticka\">"
                 + "<form action = \"sixth\" method = \"post\">"

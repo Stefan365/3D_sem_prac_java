@@ -142,6 +142,8 @@ public class Pom {
         ln = request.getParameter("lastname");
         lg = request.getParameter("login");
         pw = request.getParameter("password");
+        //sifrovanie hesla:
+        pw = CryptMD5.crypt(pw);
 
         //zapis hodnoty do DB:
         DBconn.insertValuesUser(fn, ln, lg, pw, "U");
@@ -159,12 +161,21 @@ public class Pom {
      */
     public static void updateDbUserApp(String uid, HttpServletRequest request) throws SQLException {
 
-        String fn, ln, pw, role;
+        String fn, ln, pw, pwOld, role;
 
         fn = request.getParameter("firstname");
         ln = request.getParameter("lastname");
-        pw = request.getParameter("password");
         role = request.getParameter("role");
+        pw = request.getParameter("password");
+        
+        //pokud je policko prazdne, tak neudelej nic, jinak hesla vymen:
+        if (pw.equals("")){
+            pwOld = DBconn.getUserPw(uid);
+            pw = pwOld;
+        } else {
+            //sifrovanie hesla:
+            pw = CryptMD5.crypt(pw);
+        }
 
         //zapis hodnoty do DB:
         if ((role == null) || role.equals("") ){
@@ -188,8 +199,9 @@ public class Pom {
 
         lg = request.getParameter("login");
         pw = request.getParameter("password");
+        //sifrovanie hesla:
+        pw = CryptMD5.crypt(pw);
 
-        System.out.println("LOGGGGIN: " + lg);
         uid = DBconn.getUserId(lg);
         fn = (String) DBconn.getUserFn(uid);
         ln = (String) DBconn.getUserLn(uid);
@@ -207,24 +219,18 @@ public class Pom {
      * Zapise tie atributy do session, ale len tie, ktore sa menia.
      *
      * @param session klientuv session.
-     * @param request pozadavek od klienta.
      * @throws java.sql.SQLException
      *
      */
-    public static void zapisSesFnLnPw(HttpSession session, HttpServletRequest request) throws SQLException {
-        String fn, ln, pw;
-
-        fn = request.getParameter("firstname");
-        ln = request.getParameter("lastname");
-        pw = request.getParameter("password");
+    public static void zapisSesFnLnPw(HttpSession session) throws SQLException {
+        String fn, ln, pw, uid;
 
         //Nech to najprv zapise do DB, a potom, ked sa to podari sa na to odvolava.!!!
-        /*
          uid = (String) session.getAttribute("uid");
          fn = (String)DBconn.getUserFn(uid);
          ln = (String)DBconn.getUserLn(uid);
          pw = (String)DBconn.getUserPw(uid);
-         */
+         
         //Zapis do session, aby to bolo stale poruke:
         session.setAttribute("firstname", fn);
         session.setAttribute("lastname", ln);
