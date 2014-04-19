@@ -20,10 +20,6 @@ public class P5 extends HttpServlet {
 
         HttpSession sessionF = request.getSession();
       
-        //SEM SA OD nikadial NEVRACIA, preto je sprava zbytocna. potom vymazat. 
-        //String message = (String) sessionF.getAttribute("message");
-        //sessionF.setAttribute("message", "");
-        
         String lg = (String) sessionF.getAttribute("login");
         String fn = (String) sessionF.getAttribute("firstname");
         String ln = (String) sessionF.getAttribute("lastname");
@@ -60,13 +56,12 @@ public class P5 extends HttpServlet {
         out.println("<form action = \"fifth_1\" method = \"post\">");
         out.println("<p>");
         out.println("<label>");
-        out.println("FIRST NAME : ");
+        out.println("FIRST NAME   : ");
         out.println("<input type=\"text\" value=\"" + fn + "\" name=\"firstname\"/><br/>");
-        out.println("LAST NAME : ");
+        out.println("LAST NAME    : ");
         out.println("<input type=\"text\" value=\"" + ln + "\" name=\"lastname\"/><br/>");
-        out.println("PASSWORD : ");
-        //out.println("<input type=\"password\" name=\"password\"/><br/>");
-        out.println("<input type=\"password\" value=\"" + pw + "\" name=\"password\"/><br/>");
+        out.println("NEW PASSWORD : ");
+        out.println("<input type=\"password\" name=\"password\"/><br/>");
         
         //ODOSIELACIE TLACITKO:
         out.println("<input type=\"submit\" value=\"SAVE\">");

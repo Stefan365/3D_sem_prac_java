@@ -24,10 +24,6 @@ public class P7 extends HttpServlet {
 
         HttpSession sessionH = request.getSession();
 
-        //SEM SA ODnikadial NEVRACIA, preto je sprava zbytocna. potom vymazat. 
-        String message = (String) sessionH.getAttribute("message");
-        sessionH.setAttribute("message", "");
-
         String lg = (String) sessionH.getAttribute("login");
         String uid = (String) sessionH.getAttribute("uid");
 
@@ -66,20 +62,16 @@ public class P7 extends HttpServlet {
             out.println("<body>");
             out.println("<h3>");
             out.println("DATA UPDATE:");
-            out.println("</h3>"
-                //zprava o neuspechu:
-                + " <h5 id=\"podmenu1\"> <font color=\"red\">"
-                + message + "</font>"
-                + "</h5>");
+            out.println("</h3>");
             out.println("<div>"
                 + "<form action = \"seventh_1\" method = \"post\">"
-                + "FIRST NAME : "
+                + "FIRST NAME   : "
                 + "<input type=\"text\" value=\"" + fn + "\" name=\"firstname\"/><br/>"
-                + "LAST NAME : "
+                + "LAST NAME    : "
                 + "<input type=\"text\" value=\"" + ln + "\" name=\"lastname\"/><br/>"
-                + "PASSWORD : "
-                + "<input type=\"text\" value=\"" + pw + "\" name=\"password\"/><br/>"
-                + "ROLE : "
+                + "NEW PASSWORD : "
+                + "<input type=\"password\" name=\"password\"/><br/>" 
+                + "ROLE         : "
                 + "<input type=\"text\" value=\"" + role + "\" name=\"role\"/><br/>"
             
                 //ODOSIELACIE TLACITKO:

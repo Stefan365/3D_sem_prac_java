@@ -80,7 +80,7 @@ public class P4 extends HttpServlet {
         
         //logout button:
         out.println("<div id=\"hlavickaR\">\n"
-        + "<form action=\"fourth_2\" method=\"post\">\n"
+        + "<form action=\"first\" method=\"post\">\n"
         + "<input type=\"submit\" value=\"LOGOUT\"/>\n"
         + "</form>\n"
         + "</div>\n"

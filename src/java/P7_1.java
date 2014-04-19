@@ -29,6 +29,7 @@ public class P7_1 extends HttpServlet {
         //A.Vylouceni neautorizovaneho pristupu na stranku:
         if (!(Pom.isAdmin(uid))){
             sessionH.setAttribute("message", "LOGIN INCORRECT DEAR ADMIN, PLEASE LOGIN AGAIN!");
+   
             //Dispatcher:
             String go  ="first";        
             response.sendRedirect(response.encodeRedirectURL(go));
@@ -40,8 +41,6 @@ public class P7_1 extends HttpServlet {
         try {
             //zapis danych hodnot do DB:
             Pom.updateDbUserApp(sel_uid, request);
-            //pokud byl vymaz uspesny, upravime tiez session:
-            sessionH.setAttribute("sel_user", "");
             
             
             //priprava odpovedi:
@@ -54,7 +53,7 @@ public class P7_1 extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h3 id=\"podmenu\">");
-            out.println("ADMIN 'DATA UPDATE' WAS SUCCESSFUL!");
+            out.println("ADMIN DATA UPDATE OF USER " + lg + " WAS SUCCESSFUL!");
             out.println("</h3>"
                 + "<div id=\"paticka\">"
                 + "<form action = \"sixth\" method = \"post\">"

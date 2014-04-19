@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import pak1.CryptMD5;
 import pak1.Pom;
 import static pak1.Pom.checkPassword;
 
@@ -27,6 +28,9 @@ public class P3_1 extends HttpServlet {
         try {
             String lg = request.getParameter("login");
             String pw = request.getParameter("password");
+            //sifrovanie hesla:
+            pw = CryptMD5.crypt(pw);
+
             //skontroluj heslo:
             if (checkPassword(lg, pw) == false){
                 throw new SQLException();

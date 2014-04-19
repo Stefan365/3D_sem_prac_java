@@ -37,11 +37,13 @@ public class P6_1 extends HttpServlet {
 
         String comboName = (String)sessionG.getAttribute("sel_user");
         String sel_uid = Pom.getIdFromComboName(comboName);
-        //JOptionPane.showMessageDialog(null, "*" + comboName + "*", "infoMessage", JOptionPane.INFORMATION_MESSAGE);
         
         try {
             //vymazanie daneho id zo vsetkych DB tabuliek
             Pom.deleteDbId(sel_uid);
+            //pokud byl vymaz uspesny, upravime tiez session:
+            sessionG.setAttribute("sel_user", "");
+            
             
             response.setContentType("text/html");
             response.setCharacterEncoding("utf-8");

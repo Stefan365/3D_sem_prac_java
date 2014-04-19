@@ -40,7 +40,7 @@ public class P5_1 extends HttpServlet {
             //zapis danych hodnot do DB:
             Pom.updateDbUserApp(uid, request);
             //pokud byl zapis uspesny, zapiseme ich i do session, aby boli po ruke:
-            Pom.zapisSesFnLnPw(sessionG, request);
+            Pom.zapisSesFnLnPw(sessionG);
 
             response.setContentType("text/html");
             response.setCharacterEncoding("utf-8");

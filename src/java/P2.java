@@ -23,11 +23,11 @@ public class P2 extends HttpServlet {
 
         
         HttpSession sessionB = request.getSession();
-        //Pom.nastavMessage(sessionB, request);
+
         //sprava z neuspesnych registracii:
-        
         String message = (String) sessionB.getAttribute("message");
         sessionB.setAttribute("message", "");
+        
         //vycisti pripadne zostatky z predchadzajuceho usera (jak sa sem niekto 
         //prepne skrz URL:
         Pom.cleanSesQuest(sessionB);

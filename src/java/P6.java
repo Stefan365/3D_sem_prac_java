@@ -26,6 +26,7 @@ public class P6 extends HttpServlet {
 
         String message = (String) sessionG.getAttribute("message");
         sessionG.setAttribute("message", "");
+        //vynulovanie pripadne obsahu sel_user:
         sessionG.setAttribute("sel_user", "");
         
         
@@ -76,7 +77,6 @@ public class P6 extends HttpServlet {
             + "</div>");
             
         //TLACITKO NA ZMENU USER DATA:
-        /*
         out.println("<div>"
             + "<form action = \"seventh\" method = \"post\">"
             + "<input type=\"submit\" value=\"USER DATA\">"
@@ -90,7 +90,6 @@ public class P6 extends HttpServlet {
             + "</form>"
             + "</div>");
         
-        */
         //SPATNE TLACITKO2:
         out.println("<div id=\"paticka\">"
             + "<form action = \"fourth\" method = \"post\">"
