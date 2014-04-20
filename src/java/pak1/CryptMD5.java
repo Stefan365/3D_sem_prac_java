@@ -6,10 +6,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CryptMD5 {
-   private static MessageDigest md;
-
+   
    public static String crypt(String pass){
     try {
+        MessageDigest md;
+
         md = MessageDigest.getInstance("MD5");
         
         byte[] passBytes = pass.getBytes();
@@ -18,7 +19,7 @@ public class CryptMD5 {
         
         byte[] digested = md.digest(passBytes);
         
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i=0;i<digested.length;i++){
             sb.append(Integer.toHexString(0xff & digested[i]));
         }

@@ -222,7 +222,7 @@ public class Pom {
      * @throws java.sql.SQLException
      *
      */
-    public static void zapisSesFnLnPw(HttpSession session) throws SQLException {
+    public static synchronized void zapisSesFnLnPw(HttpSession session) throws SQLException {
         String fn, ln, pw, uid;
 
         //Nech to najprv zapise do DB, a potom, ked sa to podari sa na to odvolava.!!!
@@ -532,7 +532,7 @@ public class Pom {
      *
      * @param uid user id.
      * @return
-     *
+     * !!!
      */
     public static List<List<String>> checkDbUserQueries(String uid) {
 
@@ -887,7 +887,7 @@ public class Pom {
      * @param uid user id
      * @throws java.sql.SQLException
      */
-    public static void deleteDbId(String uid) throws SQLException {
+    public static synchronized void deleteDbId(String uid) throws SQLException {
         
         List<String> queryTables = Pom.getQueryTableNames();
         List<String> queries = new ArrayList();
