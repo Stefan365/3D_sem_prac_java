@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import static pak1.DBconn.connection;
 
 /**
  *
@@ -320,7 +319,7 @@ public class Pom {
      */
     private static JTable createTableQ1(String uid) {
 
-        Statement stmt1 = null;
+        Statement stmt = null;
 
         Vector<String> col1 = new Vector<>();
         Vector<String> col2 = new Vector<>();
@@ -342,8 +341,10 @@ public class Pom {
             + " WHERE user_id = " + uid;
 
         try {
-            stmt1 = (DBconn.connection).createStatement();
-            ResultSet rs1 = stmt1.executeQuery(query1);
+            synchronized (DBconn.class) {
+                stmt = (Statement) (DBconn.connection).createStatement();
+            }
+            ResultSet rs1 = stmt.executeQuery(query1);
 
             while (rs1.next()) {
                 col2.add(rs1.getString("gender"));
@@ -355,12 +356,13 @@ public class Pom {
                 col2.add(rs1.getString("q3"));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
-            if (stmt1 != null) {
+            if (stmt != null) {
                 try {
-                    stmt1.close();
+                    stmt.close();
                 } catch (SQLException ex) {
-
+                    ex.printStackTrace();
                 }
             }
         }
@@ -381,7 +383,7 @@ public class Pom {
 
     //5.2
     /**
-     * Vytvori zobrazovaciu tabulku z udajov z DB pre T_Q1.
+     * Vytvori zobrazovaciu tabulku z udajov z DB pre T_Q2.
      *
      * @param tn DB table name.
      * @param uid ID usera.
@@ -389,7 +391,7 @@ public class Pom {
      */
     private static JTable createTableQ2(String uid) {
 
-        Statement stmt1 = null;
+        Statement stmt = null;
 
         Vector<String> col1 = new Vector<>();
         Vector<String> col2 = new Vector<>();
@@ -412,8 +414,10 @@ public class Pom {
             + " WHERE user_id = " + uid;
 
         try {
-            stmt1 = (DBconn.connection).createStatement();
-            ResultSet rs1 = stmt1.executeQuery(query1);
+            synchronized (DBconn.class) {
+                stmt = (Statement) (DBconn.connection).createStatement();
+            }
+            ResultSet rs1 = stmt.executeQuery(query1);
 
             while (rs1.next()) {
                 col2.add(rs1.getString("gender"));
@@ -429,12 +433,13 @@ public class Pom {
                 col2.add(rs1.getString("q7"));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
-            if (stmt1 != null) {
+            if (stmt != null) {
                 try {
-                    stmt1.close();
+                    stmt.close();
                 } catch (SQLException ex) {
-
+                    ex.printStackTrace();
                 }
             }
         }
@@ -463,21 +468,26 @@ public class Pom {
     private static void createGUI(String tn, String uid) {
         //Create and set up the window.
         String header = "";
-        Statement stmt2 = null;
-        String query2 = "SELECT login FROM T_USER WHERE id = " + uid;
+        Statement stmt = null;
+        String query = "SELECT login FROM VERES_T_USER WHERE id = " + uid;
 
         try {
-            stmt2 = (DBconn.connection).createStatement();
-            ResultSet rs2 = stmt2.executeQuery(query2);
-            while (rs2.next()) {
-                header = rs2.getString("login") + " : " + tn.substring(tn.length() - 2);
+            synchronized (DBconn.class) {
+                stmt = (Statement) (DBconn.connection).createStatement();
+            }
+
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                header = rs.getString("login") + " : " + tn.substring(tn.length() - 2);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
-            if (stmt2 != null) {
+            if (stmt != null) {
                 try {
-                    stmt2.close();
+                    stmt.close();
                 } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -549,9 +559,11 @@ public class Pom {
         String tn, userId = "";
 
         try {
-            stmt1 = (DBconn.connection).createStatement();
-            stmt2 = (DBconn.connection).createStatement();
-
+            synchronized (DBconn.class) {
+                stmt1 = (Statement) (DBconn.connection).createStatement();
+                stmt2 = (Statement) (DBconn.connection).createStatement();
+            }
+            
             ResultSet rs1 = stmt1.executeQuery(query1);
             
             ResultSet rs2;
@@ -578,13 +590,15 @@ public class Pom {
             return listAll;
 
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         } finally {
             if (stmt2 != null) {
                 try {
                     stmt2.close();
                 } catch (SQLException ex) {
-
+                    ex.printStackTrace();
+            
                 }
             }
 
@@ -684,8 +698,7 @@ public class Pom {
                 str = str + (String) itr.next();
             }
             str = str + "\n";
-            str = str + "\n";
-            str = str + "\n";
+            
         }
        return str;
     }
@@ -703,24 +716,27 @@ public class Pom {
         // ze sa skontroluje (zo session), jestli i prihlasene meno a heslo 
         // patria tomu istemu uid
         //
-        String role, query = "SELECT role from T_USER where id =" + uid;
+        String role, query = "SELECT role from VERES_T_USER where id =" + uid;
         Statement stmt = null;
 
         try {
-            stmt = (DBconn.connection).createStatement();
+            synchronized (DBconn.class) {
+                stmt = (Statement) (DBconn.connection).createStatement();
+            }
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 role = rs.getString("role");
                 return role.equals("A");
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
-
+                    ex.printStackTrace();
                 }
             }
         }
@@ -738,13 +754,18 @@ public class Pom {
      */
     public static boolean checkPassword(String lg, String pw) {
 
-        String query1 = "SELECT password from T_USER WHERE login LIKE '" + lg + "'";
+        String query1;
+        query1 = "SELECT password from VERES_T_USER WHERE login LIKE '" + lg + "'";
         String realPw = "";
         Statement stmt = null;
+        //netreba sifrovat, lebo heslo prichadza uz zasifrovane:
+        //pw = CryptMD5.crypt(pw);
 
         try {
 
-            stmt = (DBconn.connection).createStatement();
+            synchronized (DBconn.class) {
+                stmt = (Statement) (DBconn.connection).createStatement();
+            }
             ResultSet rs1 = stmt.executeQuery(query1);
 
             while (rs1.next()) {
@@ -753,12 +774,14 @@ public class Pom {
             return (realPw == null ? false : realPw.equals(pw));
 
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -777,11 +800,13 @@ public class Pom {
 
         List<String> comboNames = new ArrayList();
         String uid, fn, ln, cn;
-        String query = "SELECT id, first_name, last_name from T_USER where role NOT LIKE 'A'";
+        String query = "SELECT id, first_name, last_name from VERES_T_USER where role NOT LIKE 'A'";
         Statement stmt = null;
 
         try {
-            stmt = (DBconn.connection).createStatement();
+            synchronized (DBconn.class) {
+                stmt = (Statement) (DBconn.connection).createStatement();
+            }
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 uid = "" + rs.getInt("id");
@@ -793,12 +818,14 @@ public class Pom {
             return comboNames;
 
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -875,7 +902,8 @@ public class Pom {
         try {
             uid = Integer.parseInt(zoz[0]);
         } catch (NumberFormatException e){
-        
+            e.printStackTrace();
+            return "";
         }
         return "" + uid;
     }
@@ -896,39 +924,31 @@ public class Pom {
             sqlq = "DELETE FROM " + s + " WHERE user_id = " + uid;
             queries.add(sqlq);
         }
-        sqlu = "DELETE FROM T_USER WHERE id = " + uid;
-        
+        sqlu = "DELETE FROM VERES_T_USER WHERE id = " + uid;
+        queries.add(sqlu);
+                    
         Statement stmt = null;
         
         //deleting in queries tables:
         for (String sql: queries){
             try {
-                stmt = (DBconn.connection).createStatement();
+                synchronized (DBconn.class) {
+                    stmt = (Statement) (DBconn.connection).createStatement();
+                }
                 stmt.executeUpdate(sql);
             } catch (SQLException e) {
+                e.printStackTrace();
             } finally {
                 if (stmt != null) {
                     try {
                         stmt.close();
                     } catch (SQLException ex) {
+                        ex.printStackTrace();
+            
                     }
                 }
             }
-        }
-        
-        //deleting in T_USER table:
-        try {
-             stmt = (DBconn.connection).createStatement();
-             stmt.executeUpdate(sqlu);
-            } catch (SQLException e) {
-            } finally {
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException ex) {
-                    }
-                }
-            }
+        }        
     }
 
     //19.
@@ -946,7 +966,9 @@ public class Pom {
         String tn;
         
         try {
-            stmt = (DBconn.connection).createStatement();
+            synchronized (DBconn.class) {
+                stmt = (Statement) (DBconn.connection).createStatement();
+            }
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 tn = rs.getString("q_tableName");
@@ -955,12 +977,14 @@ public class Pom {
             return queryTables;
 
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -1024,29 +1048,4 @@ public class Pom {
         return str;
     }
 
-    //23.
-    /**
-     * Zjistuje jestli existuje DB tabulka T_USER, 
-     * na zaklade ceho usoudi, jestli ma spustit inicializaci DB.
-     *
-     * @return ano/ne pro existenci T_USER v databazi.
-     */
-    public static boolean existsT_USER() {
-        com.mysql.jdbc.Statement stmt = null;
-        try {
-            stmt = (com.mysql.jdbc.Statement) connection.createStatement();
-            String sql = "SELECT * FROM T_USER";
-            ResultSet rs = stmt.executeQuery(sql);
-            return true;
-        } catch (SQLException ex) {
-            return false;
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException ex) {
-                }
-            }
-        }
-    }
 }

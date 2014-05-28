@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JOptionPane;
 import pak1.CryptMD5;
 import pak1.DBconn;
 import static pak1.DBconn.insertValuesUser;
@@ -98,8 +99,8 @@ public class Skuska {
             
             //Pom.zapisDbUserApp(null, null);
             
-            System.out.println(CryptMD5.crypt("ahoj"));
-            DBconn.insertValuesUser("Stefan", "Veres", "admin", CryptMD5.crypt("admin"), "A");
+            //System.out.println(CryptMD5.crypt("ahoj"));
+            //DBconn.insertValuesUser("Stefan", "Veres", "admin", CryptMD5.crypt("admin"), "A");
             
             //} catch (SQLException ex) {
             //    Logger.getLogger(Skuska.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,6 +110,36 @@ public class Skuska {
         //    } catch (NoSuchAlgorithmException ex) {
           //  Logger.getLogger(Skuska.class.getName()).log(Level.SEVERE, null, ex);
         //}
+        
+        //DBconn.dropTable("T_USER");
+        
+        //DBconn.dropAllTables();
+        System.out.println("vsetky:" + DBconn.existsAllTables());
+       
+        //DBconn.createTableQ1();
+        //DBconn.dropTable("VERES_T_USER");
+        //DBconn.createTableUser();
+        //DBconn.createTableQ1();
+        //DBconn.createTableQ2();
+        //DBconn.createTableQueries();        
+        
+        //DBconn.addFKTableQ1();
+        
+       
+        //Window win = new Window();
+        
+        //JOptionPane.showMessageDialog(null,"AHOJ First window\nkokotko",
+        //         "Informační okno", JOptionPane.INFORMATION_MESSAGE );
+        DBconn.dropTable("VERES_T_USER");
+        DBconn.dropTable("T_Q1");
+        DBconn.dropTable("T_Q2");
+        DBconn.dropTable("T_QUERY");
+        
+        System.out.println("VERES_T_USER: " + DBconn.existsTable("VERES_T_USER"));
+        System.out.println("T_Q1: " + DBconn.existsTable("T_Q1"));
+        System.out.println("T_Q2: " + DBconn.existsTable("T_Q2"));
+        System.out.println("T_QUERY: " + DBconn.existsTable("T_QUERY"));
+        
     }
 
     

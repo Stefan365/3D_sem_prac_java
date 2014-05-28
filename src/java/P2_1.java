@@ -55,6 +55,7 @@ public class P2_1 extends HttpServlet {
             out.println("</html>");
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             sessionB.setAttribute("message", "TRY IT AGAIN PLEASE, THIS LOGIN ALREADY EXISTS!");
 
             //Dispatcher:

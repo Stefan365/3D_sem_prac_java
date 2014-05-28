@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import pak1.DBconn;
 import pak1.Pom;
 
 /**
@@ -31,8 +32,9 @@ public class P1 extends HttpServlet {
         //vycisti pripadne zostatky z predchadzajuceho usera:
         Pom.cleanSesQuest(sessionA);
         String initDb = "";
+        
         //inicializacia DB
-        if(!Pom.existsT_USER()){
+        if(!DBconn.existsAllTables()){
             initDb = Pom.initDbText();
         }
 
