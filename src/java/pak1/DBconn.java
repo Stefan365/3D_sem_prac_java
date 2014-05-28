@@ -67,7 +67,7 @@ public class DBconn {
             + " role VARCHAR(1),"
             
             + " PRIMARY KEY(id),"
-            + " CONSTRAINT usr_UN UNIQUE(login))";
+            + " CONSTRAINT usr_UN UNIQUE(login)) DEFAULT CHARSET=utf8";
 
         stmt.executeUpdate(sql);
         stmt.close();
@@ -96,7 +96,7 @@ public class DBconn {
             
             + " PRIMARY KEY(id),"
             //+ " CONSTRAINT q1_FK FOREIGN KEY(user_id) REFERENCES veres_t_user(id) ON DELETE SET NULL,"
-            + " CONSTRAINT q1_UN UNIQUE(user_id))"; //uzivatel muze vyplnit anketu jen jednou
+            + " CONSTRAINT q1_UN UNIQUE(user_id)) DEFAULT CHARSET=utf8"; //uzivatel muze vyplnit anketu jen jednou
 
         stmt.executeUpdate(sql);
         stmt.close();
@@ -142,7 +142,7 @@ public class DBconn {
             
             + " PRIMARY KEY(id),"
             //+ " CONSTRAINT q2_FK FOREIGN KEY(user_id) REFERENCES veres_t_user(id) ON DELETE SET NULL,"
-            + " CONSTRAINT q2_UN UNIQUE(user_id))"; //uzivatel muze vyplnit anketu jen jednou
+            + " CONSTRAINT q2_UN UNIQUE(user_id)) DEFAULT CHARSET=utf8"; //uzivatel muze vyplnit anketu jen jednou
         
         stmt.executeUpdate(sql);
         stmt.close();
@@ -167,7 +167,7 @@ public class DBconn {
             + " (id INTEGER NOT NULL AUTO_INCREMENT, " + " q_tableName VARCHAR(20) NOT NULL, "
             
             + " PRIMARY KEY(id),"
-            + " CONSTRAINT q_UN UNIQUE(q_tableName))"; //dany dotaznik je v DB jen jednou
+            + " CONSTRAINT q_UN UNIQUE(q_tableName)) DEFAULT CHARSET=utf8"; //dany dotaznik je v DB jen jednou
 
         stmt.executeUpdate(sql);
         stmt.close();
