@@ -47,6 +47,8 @@ public class P2 extends HttpServlet {
         out.println("<body>");
         out.println("<h3>");
         out.println("REGISTRATION:");
+        
+        
         out.println("</h3>"
             //sprava o neuspechu:
             + " <h5 id=\"podmenu1\"> <font color=\"red\">"

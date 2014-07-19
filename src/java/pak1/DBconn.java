@@ -19,15 +19,15 @@ import java.util.logging.Logger;
 public class DBconn {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    //static final String DATABASE_URL = "jdbc:mysql://localhost/IIVOS_java2?characterEncoding=utf8";
-    //static final String USER = "root";
-    //static final String PASSWORD = "";
-    //static final String DATABASE = "IIVOS_java2";
+    static final String DATABASE_URL = "jdbc:mysql://localhost/IIVOS_java2?characterEncoding=utf8";
+    static final String USER = "root";
+    static final String PASSWORD = "";
+    static final String DATABASE = "IIVOS_java2";
     
-    static final String DATABASE_URL = "jdbc:mysql://project.iivos.cz:9906/iivos3Dalfa?characterEncoding=utf8";
-    static final String USER = "veres";
-    static final String PASSWORD = "Stefan.Veres";
-    static final String DATABASE = "iivos3Dalfa";
+    //static final String DATABASE_URL = "jdbc:mysql://project.iivos.cz:9906/iivos3Dalfa?characterEncoding=utf8";
+    //static final String USER = "veres";
+    //static final String PASSWORD = "Stefan.Veres";
+    //static final String DATABASE = "iivos3Dalfa";
     
     static final String[] tables = {"T_QUERY", "T_Q1","T_Q2", "VERES_T_USER"};
         
